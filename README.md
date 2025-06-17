@@ -207,4 +207,4 @@ Com as estratégias baseadas nos dados analisados, espera-se **reduzir a taxa de
 
 **Autora**: Tayara 👩‍💻  
 **Objetivo**: Aprendizado prático em análise de dados, churn e tomada de decisão com base em evidências.  
-
+PROGRAMA ONE - ORACLE NEXT EDUCATION | ALURA | DATA SCIENCE 
