@@ -1,121 +1,188 @@
 # Challenge-TelecomX
 
-# 📊 Análise de Evasão de Clientes - Telecom X
-
-Este projeto tem como objetivo analisar os dados de clientes da empresa **Telecom X** com foco no problema de **evasão de clientes (Churn)**. Através de um processo completo de limpeza, tratamento e exploração dos dados, foram extraídos insights valiosos que podem ajudar a empresa a **reduzir a saída de clientes** e **aumentar a retenção**.
-
----
+# 📄 Relatório Final — Análise de Evasão de Clientes (Churn) - Telecom X
 
 ## 🧠 Introdução
 
-A evasão de clientes é um dos maiores desafios no setor de telecomunicações. Manter um cliente custa menos do que conquistar um novo. Este projeto tem como missão **descobrir padrões nos dados de clientes evadidos** e propor ações com base nessas descobertas.
+Este projeto teve como objetivo analisar os dados da empresa **Telecom X** para entender os principais fatores que influenciam a **evasão de clientes (Churn)**. Através de uma abordagem estruturada com **limpeza de dados, análise exploratória e visualizações**, buscamos responder à pergunta:  
+**"O que faz um cliente cancelar seu contrato?"**
 
 ---
 
-## 🧹 Etapas de Limpeza e Tratamento de Dados
+## 🧼 Limpeza e Tratamento de Dados
 
-- Importação dos dados a partir de um arquivo `.json`.
-- Normalização da estrutura com `pandas.json_normalize`.
-- Conversão de tipos numéricos e correção de dados inconsistentes.
-- Padronização textual: minúsculas, sem espaços e com underscore (`snake_case`).
-- Substituição de valores nulos e transformação de variáveis categóricas em numéricas.
-- Criação de nova feature: `contas_diarias` = cobrança mensal / 30.
+As principais etapas realizadas foram:
+
+- **Importação e normalização** dos dados no formato `.json`.
+- **Conversão de colunas numéricas** com tipos inconsistentes (`object` → `float`).
+- **Padronização de valores categóricos**: lowercase, underscores e substituição de espaços.
+- **Transformação de variáveis binárias** (‘sim’/‘não’, ‘yes’/‘no’) para valores numéricos (1 e 0).
+- Criação da feature `contas_diarias` para representar a cobrança diária média do cliente.
 
 ---
 
 ## 📊 Análise Exploratória de Dados (EDA)
 
-### 📌 Tipo de Contrato
-
-| Tipo               | Taxa de Churn |
-|--------------------|---------------|
-| Mensal             | **41,3%**     |
-| 1 ano              | 10,9%         |
-| 2 anos             | 2,8%          |
-
-📉 Contratos mensais estão fortemente associados à evasão.
+Diversas visualizações e agrupamentos foram usados para encontrar padrões entre os clientes que **cancelaram** e os que **permaneceram**.
 
 ---
 
-### 📌 Método de Pagamento
+### 🔍 1. Tempo Como Cliente vs Cancelamento
 
-| Método                  | Taxa de Churn |
-|-------------------------|---------------|
-| Electronic Check        | **43,8%**     |
-| Mailed Check            | 18,5%         |
-| Bank Transfer (Auto)    | 16,2%         |
-| Credit Card (Auto)      | 14,8%         |
+#### 📦 Boxplot
+- **Grupo 0 (não cancelou)**:
+  - Mediana: ~40 meses
+  - Distribuição ampla (até 72 meses)
+- **Grupo 1 (cancelou)**:
+  - Mediana: ~10 meses
+  - Maioria cancelou com menos de 15 meses
 
-💳 Pagamentos automáticos são mais estáveis.
+✅ **Interpretação**:  
+Clientes que cancelam geralmente são novos. A evasão precoce é um padrão forte aqui.
 
----
+#### 📈 Histograma
+- **Curva vermelha (cancelou)**: concentrada nos 0–10 meses
+- **Curva azul (ficou)**: cresce com o tempo
 
-### 📌 Serviços Adicionais
+✅ **Refinamento**:  
+A chance de churn diminui drasticamente após 20 meses.
 
-| Serviço              | Taxa de Churn |
-|----------------------|----------------|
-| Sem Backup Online    | 38,7%          |
-| Com Backup Online    | 20,9%          |
-| Sem Suporte Técnico  | 30,2%          |
-| Com Suporte Técnico  | 14,7%          |
-| Sem Streaming TV     | 23,6%          |
-| Com Streaming TV     | 29,2%          |
-
-🛡️ Serviços extras ajudam a reter o cliente.
+📌 **Insight estratégico**:  
+**Os primeiros 3 a 6 meses são críticos**. Investir forte em retenção nesse período.
 
 ---
 
-### 📌 Perfil Familiar
+### 🔍 2. Cobrança Total vs Cancelamento
 
-| Situação                | Taxa de Churn |
-|-------------------------|---------------|
-| Sem Companheiro(a)      | 32,0%         |
-| Com Companheiro(a)      | 19,0%         |
-| Sem Dependentes         | 30,3%         |
-| Com Dependentes         | 14,9%         |
+#### 📦 Boxplot
+- Clientes que não cancelaram têm **cobrança total maior e mais distribuída**.
+- Clientes que cancelaram gastaram **muito pouco antes de sair**.
 
-👪 Clientes com família têm menor propensão ao cancelamento.
+✅ **Interpretação**:  
+Churn está relacionado ao **baixo investimento acumulado** — ou seja, saem rápido e cedo.
 
----
+#### 📈 Histograma
+- **Curva vermelha** (cancelou): alta para valores baixos de cobrança (~0–1000).
+- **Curva azul** (ficou): aparece mais nos valores altos (>3000).
 
-### 📌 Tipo de Internet
-
-| Tipo          | Taxa de Churn |
-|---------------|---------------|
-| Fiber Optic   | **40,6%**     |
-| DSL           | 18,4%         |
-| Sem Internet  | 7,1%          |
-
-⚠️ A tecnologia de fibra óptica está associada a maior churn — merece investigação.
+📌 **Insight estratégico**:  
+Clientes que permanecem têm **lifetime value** maior. Precisa **aumentar o valor percebido logo no início**.
 
 ---
 
-### 📌 Gênero
+### 💰 3. Custo Mensal (cobranca_mensal) vs Cancelamento
 
-| Gênero     | Taxa de Churn |
-|------------|---------------|
-| Feminino   | 26,0%         |
-| Masculino  | 25,0%         |
+#### 📦 Boxplot
+- Clientes que cancelaram pagam **mais por mês** do que os que ficaram.
+- Mediana dos cancelados: **> R$75**
+- Mediana dos que ficaram: **< R$75**
 
-📎 Sem diferença significativa entre os gêneros.
+#### 📈 Histograma
+- **Curva vermelha (cancelou)**: concentrada entre R$60 e R$100
+- **Curva azul (ficou)**: mais distribuída e com picos nos valores mais baixos
+
+✅ **Interpretação**:  
+**Clientes com mensalidade alta têm maior risco de churn**, especialmente se não percebem valor agregado.
+
+📌 **Insight**:  
+**Sensibilidade a preço é real.** Se o serviço não justificar o custo, o cancelamento vem.
 
 ---
 
-## 🧾 Conclusões
+### 📌 Contrato
 
-- Contratos mensais e pagamentos via **electronic check** são os maiores vilões da retenção.
-- Clientes **com serviços adicionais** e **laços familiares** tendem a permanecer mais tempo.
-- **Alta cobrança mensal** e **baixo tempo de casa** também aparecem ligados à evasão.
+| Tipo de Contrato | Taxa de Cancelamento |
+|------------------|-----------------------|
+| Month-to-month   | **41,3%**             |
+| One year         | 10,9%                 |
+| Two year         | 2,8%                  |
+
+➡️ **Clientes com contrato mensal são os mais propensos a cancelar.**
 
 ---
 
-## 💡 Recomendações
+### 💳 Método de Pagamento
 
-1. **Incentivar migração para contratos de longo prazo**.
-2. **Campanhas para migrar clientes de electronic check para métodos automáticos**.
-3. **Oferecer pacotes com serviços adicionais gratuitos nos primeiros meses**.
-4. **Focar nos clientes novos** com estratégias de boas-vindas e onboarding.
-5. **Analisar clientes com cobrança mensal alta** e oferecer alternativas mais econômicas.
+| Método de Pagamento           | Churn (%) |
+|-------------------------------|-----------|
+| Electronic Check              | **43,8%** |
+| Mailed Check                  | 18,5%     |
+| Bank Transfer (Automatic)     | 16,2%     |
+| Credit Card (Automatic)       | 14,8%     |
+
+➡️ **Pagamentos manuais estão ligados à maior evasão.**
+
+---
+
+### 🎁 Serviços Adicionais
+
+| Serviço              | Cancelamento (%) |
+|----------------------|------------------|
+| Sem Backup Online    | 38,7%            |
+| Com Backup Online    | 20,9%            |
+| Sem Suporte Técnico  | 30,2%            |
+| Com Suporte Técnico  | 14,7%            |
+| Sem Streaming TV     | 23,6%            |
+| Com Streaming TV     | 29,2%            |
+
+➡️ Clientes **sem serviços extras** tendem a sair mais.
+
+---
+
+### 👨‍👩‍👧 Perfil Familiar
+
+| Situação              | Churn (%) |
+|-----------------------|-----------|
+| Sem Companheiro(a)    | 32,0%     |
+| Com Companheiro(a)    | 19,0%     |
+| Sem Dependentes       | 30,3%     |
+| Com Dependentes       | 14,9%     |
+
+➡️ Ter família parece ser um fator de retenção.
+
+---
+
+### 🌐 Tipo de Internet
+
+| Tipo de Internet | Churn (%) |
+|------------------|-----------|
+| Fiber Optic      | **40,6%** |
+| DSL              | 18,4%     |
+| Sem Internet     | 7,1%      |
+
+➡️ Aparentemente, **clientes de fibra óptica estão mais insatisfeitos**, mesmo com melhor tecnologia.
+
+---
+
+### 👥 Gênero
+
+| Gênero   | Cancelamento (%) |
+|----------|------------------|
+| Feminino | 26,0%            |
+| Masculino| 25,0%            |
+
+➡️ **Gênero não influencia significativamente o churn.**
+
+---
+
+## ✅ Resumo das Interpretações
+
+| Variável           | Cancelamento | Padrão Identificado                        | Ação Sugerida                                              |
+|--------------------|--------------|--------------------------------------------|-------------------------------------------------------------|
+| Tempo como Cliente | 1 (Sim)      | Sai cedo, geralmente < 15 meses            | Estratégias de onboarding e fidelização nos primeiros meses |
+| Cobrança Total     | 1 (Sim)      | Gastaram pouco → saíram cedo               | Aumentar valor percebido rapidamente                        |
+| Custo Mensal       | 1 (Sim)      | Pagam mais por mês                         | Oferecer mais valor ou plano mais acessível                |
+
+---
+
+## ✅ Recomendações
+
+1. **Incentivar migração para contratos de 1 ou 2 anos** com benefícios (ex: desconto no primeiro mês).
+2. **Oferecer bônus ou descontos para quem adotar pagamento automático**.
+3. Criar **campanhas de retenção** focadas em clientes com **cobrança mensal alta**.
+4. Promover **serviços extras gratuitos por tempo limitado** (ex: backup ou suporte técnico) como estratégia de fidelização.
+5. **Investigar insatisfação de clientes com fibra óptica**, já que esse grupo apresenta churn elevado.
+6. **Foco total nos primeiros 3 a 6 meses** do cliente com onboarding, atendimento personalizado e percepção de valor.
 
 ---
 
