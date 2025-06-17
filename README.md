@@ -27,6 +27,8 @@ Diversas visualizações e agrupamentos foram usados para encontrar padrões ent
 
 ---
 
+![Análise das Variáveis Numéricas](analise_variaveis_numericas.png)
+
 ### 🔍 1. Tempo Como Cliente vs Cancelamento
 
 #### 📦 Boxplot
