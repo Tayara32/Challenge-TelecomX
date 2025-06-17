@@ -1,6 +1,6 @@
 # Challenge-TelecomX
 
-# 📄 Relatório Final — Análise de Evasão de Clientes (Churn) - Telecom X
+# Análise de Evasão de Clientes (Churn) - Telecom X
 
 ## 🧠 Introdução
 
